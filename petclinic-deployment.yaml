@@ -1,0 +1,43 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+ name: your-app-deployment
+ namespace: jenkins
+ labels:
+    app: your-app
+    type: springboot
+spec:
+ template:
+    metadata:
+     name: your-app-pod
+     labels:
+        app: your-app
+    spec:
+     containers:
+        - name: your-app
+          image: agust30xyz/ms-your-app:1.0 
+ replicas: 1
+ 
+ selector: 
+    matchLabels:
+        app: your-app
+---
+apiVersion: v1
+kind: Service
+metadata:
+ name: your-app-service
+ namespace: jenkins
+ labels:
+    app: your-app
+    type: springboot
+spec:
+ selector: 
+    app: your-app
+ ports:
+  - protocol: TCP
+    port: 8080
+    targetPort: 8080
+    nodePort: 31317
+ type: LoadBalancer
+ externalIPs:
+  - 192.168.99.101
